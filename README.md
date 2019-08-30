@@ -23,8 +23,6 @@ This is a demo app built in Svelte mostly to practice my programming skills.
     * Need to redo those input styles
 * Implement random id on labels that matches inputs in form groups
 
-    <script>
-
         function makeid(length) {
             var result           = '';
             var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -36,5 +34,3 @@ This is a demo app built in Svelte mostly to practice my programming skills.
         }
 
         let labelId = 'a'+makeid(6);
-
-    </script>
