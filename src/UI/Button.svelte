@@ -33,6 +33,7 @@
         justify-content: center;
         vertical-align: baseline;
         color: #333;
+        white-space: nowrap;
     }
 
     button[disabled] {

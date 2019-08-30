@@ -13,10 +13,11 @@
         font-family: Helvetica, Arial, sans-serif;
     }
 
-    input[type="text"] {
+    input {
         width: 100%;
         padding: 0.7rem;
         background: #FFF;
+        color: #333;
         border-radius: 0.3rem;
         border: 1px solid #BDBDBD;
         box-shadow: inset 0.1rem 0.1rem 0.2rem 0 rgba(0,0,0,0.12);
@@ -29,7 +30,7 @@
         transition: 0.1s ease-in-out all;
     }
 
-    input[type="text"][disabled] {
+    input[disabled] {
         background: #EEE;
     }
 

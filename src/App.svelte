@@ -1,23 +1,29 @@
 <script>
 
-    import Chart from './Chart.svelte';
+    // Specific to this app
+    import Chart from './Specific/Chart.svelte';
+    import SkillItem from './Specific/SkillItem.svelte';
 
-    // UI
-    import Label from './Label.svelte';
-    import Select from './Select.svelte';
-    import Input from './Input.svelte';
-    import InputNumber from './InputNumber.svelte';
-    import InputColorAlt from './InputColorAlt.svelte';
-    import Sample from './Sample.svelte';
-    import SkillItem from './SkillItem.svelte';
-    import Button from './Button.svelte';
-    import ButtonToolbar from './ButtonToolbar.svelte';
-    import FormGroup from './FormGroup.svelte';
-    import FormGroupLayout from './FormGroupLayout.svelte';
-    import Alert from './Alert.svelte';
-    import AlertStack from './AlertStack.svelte';
-    import Blankslate from './Blankslate.svelte';
-    import InputColor from './InputColor.svelte';
+    // Specific to styleguide
+    import Sample from './Styleguide/Sample.svelte';
+
+    // General UI
+    import Box from './UI/Box.svelte';
+    import Label from './UI/Label.svelte';
+    import Select from './UI/Select.svelte';
+    import Input from './UI/Input.svelte';
+    import InputNumber from './UI/InputNumber.svelte';
+    import InputColorAlt from './UI/InputColorAlt.svelte';
+    import Button from './UI/Button.svelte';
+    import ButtonToolbar from './UI/ButtonToolbar.svelte';
+    import FormGroup from './UI/FormGroup.svelte';
+    import Toolbar from './UI/Toolbar.svelte';
+    import ToolbarItem from './UI/ToolbarItem.svelte';
+    import FormGroupLayout from './UI/FormGroupLayout.svelte';
+    import Alert from './UI/Alert.svelte';
+    import AlertStack from './UI/AlertStack.svelte';
+    import Blankslate from './UI/Blankslate.svelte';
+    import InputColor from './UI/InputColor.svelte';
 
     let maxTeamMembersReached = false;
 
@@ -300,6 +306,20 @@
         useDemoData("big");
     }
 
+    let windowWidth = window.innerWidth;
+    let isMobile = false;
+
+    handleResize();
+
+    function handleResize() {
+        windowWidth = window.innerWidth;
+        if (windowWidth < 1023) {
+          isMobile = true
+        } else {
+          isMobile = false
+        }
+    }
+
 
 </script>
 
@@ -331,228 +351,241 @@
         #columns > div:nth-child(3) { flex: 3 1 40rem; padding: 0; }
 
     }
-    
+
     #styleguide {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        padding: 4rem;
+        padding: 2.4rem;
         background: #FFF;
         z-index: 1;
         overflow: scroll;
     }
 
+    .scroller {
+        overflow: scroll;
+    }
+
 </style>
 
-<h1>Skilliverse {#if teamName}for {teamName}{/if}</h1>
+<svelte:window on:resize={handleResize}/>
 
-{#if styleguide}
-    <div id="styleguide">
-        <Button on:click={toggleStyleguide}>Hide styleguide</Button>
-        <h1>Styleguide</h1>
+<div class="{isMobile ? 'is-mobile' : ''}">
 
-        <h2>Pickers</h2>
+    <h1>Skilliverse {#if teamName}for {teamName}{/if}</h1>
 
-        <Sample>
-            <Select>
-                <option value="value-1">Value 1</option>
-                <option value="value-2">Value 2</option>
-                <option value="value-3">Value 3</option>
-            </Select>
-        </Sample>
+    {#if styleguide}
+        <div id="styleguide">
+            <Button on:click={toggleStyleguide}>Hide styleguide</Button>
+            <h1>Styleguide</h1>
 
-        <h2>Inputs</h2>
+            <h2>Pickers</h2>
 
-        <h3>Text</h3>
-
-        <Sample>
-            <Input value="Test" />
-        </Sample>
-        <h3>Color</h3>
-        <Sample>
-            <InputColor value="#FF0000" />
-        </Sample>
-
-        <h2>Alerts</h2>
-
-        <h3>Skins</h3>
-        <Sample>
-            <Alert>Hey</Alert>
-        </Sample>
-        <Sample>
-            <Alert type="error">Hey</Alert>
-        </Sample>
-        <Sample>
-            <Alert type="success">Hey</Alert>
-        </Sample>
-
-        <h3>Types</h3>
-        <h4>Normal</h4>
-        <Sample>
-            <Alert>Hey</Alert>
-        </Sample>
-        <h4>Dismissible</h4>
-        <Sample>
-            <Alert dismissible>Hey</Alert>
-        </Sample>
-
-        <h2>Buttons</h2>
-        <Sample>
-            <Button icon="close" layout="icon-only">Close</Button>
-            <Button icon="close">Close</Button>
-        </Sample>
-
-    </div>
-{/if}
-
-{#if debug}
-    <div id="debug">
-        <FormGroupLayout type="horizontal">
-            <FormGroup>
-                <Label>Team name</Label>
-                <Input bind:value="{teamName}" />
-            </FormGroup>
-            <FormGroup>
-                <Label>Dataset</Label>
-                <Select id="fieldDataset" bind:value={dataset} changeEvent="{useDemoData}">
-                    <option value="big">Big</option>
-                    <option value="short">Short</option>
-                    <option value="medium" >Medium</option>
-                    <option value="invalid">Invalid</option>
+            <Sample>
+                <Select>
+                    <option value="value-1">Value 1</option>
+                    <option value="value-2">Value 2</option>
+                    <option value="value-3">Value 3</option>
                 </Select>
-            </FormGroup>
-            <FormGroup>
-                <Label>Full colors set</Label>
-                <div class="form-group-controls">
-                    {#each chartColors as color}
-                        <InputColor style="margin-right: 0.5rem;" bind:value="{color}" />
-                    {/each}
-                </div>
-            </FormGroup>
-        </FormGroupLayout>
-        <Button on:click={toggleDebug}>Exit debug mode</Button>
-        <Button on:click={toggleStyleguide}>Show styleguide</Button>
-    </div>
-{/if}
+            </Sample>
 
-{#if !showHelp}
-    <div class="help-area">
-        <Button icon="question" on:click={toggleHelp}>Help</Button>
-    </div>
-{/if}
+            <h2>Inputs</h2>
 
-{#if showHelp && !debug}
-    <div style="margin-bottom: 20px;">
-        <Blankslate>
+            <h3>Text</h3>
+
+            <Sample>
+                <Input value="Test" />
+            </Sample>
+            <h3>Color</h3>
+            <Sample>
+                <InputColor value="#FF0000" />
+            </Sample>
+
+            <h2>Alerts</h2>
+
+            <h3>Skins</h3>
+            <Sample>
+                <Alert>Hey</Alert>
+            </Sample>
+            <Sample>
+                <Alert type="error">Hey</Alert>
+            </Sample>
+            <Sample>
+                <Alert type="success">Hey</Alert>
+            </Sample>
+
+            <h3>Types</h3>
+            <h4>Normal</h4>
+            <Sample>
+                <Alert>Hey</Alert>
+            </Sample>
+            <h4>Dismissible</h4>
+            <Sample>
+                <Alert dismissible>Hey</Alert>
+            </Sample>
+
+            <h2>Buttons</h2>
+            <Sample>
+                <Button icon="close" layout="icon-only">Close</Button>
+                <Button icon="close">Close</Button>
+            </Sample>
+
+        </div>
+    {/if}
+
+    {#if debug}
+        <Box id="debug">
+            <FormGroupLayout type="horizontal">
+                <FormGroup>
+                    <Label>Team name</Label>
+                    <Input bind:value="{teamName}" />
+                </FormGroup>
+                <FormGroup>
+                    <Label>Dataset</Label>
+                    <Select id="fieldDataset" bind:value={dataset} changeEvent="{useDemoData}">
+                        <option value="big">Big</option>
+                        <option value="short">Short</option>
+                        <option value="medium" >Medium</option>
+                        <option value="invalid">Invalid</option>
+                    </Select>
+                </FormGroup>
+                <FormGroup>
+                    <Label>Full colors set</Label>
+                    <div class="form-group-controls">
+                        <Toolbar>
+                            {#each chartColors as color}
+                                <ToolbarItem>
+                                    <InputColor bind:value="{color}" />
+                                </ToolbarItem>
+                            {/each}
+                        </Toolbar>
+                    </div>
+                </FormGroup>
+            </FormGroupLayout>
+            <Button on:click={toggleDebug}>Exit debug mode</Button>
+            <Button on:click={toggleStyleguide}>Show styleguide</Button>
+        </Box>
+    {/if}
+
+    {#if !showHelp}
+        <div class="help-area">
+            <Button icon="question" on:click={toggleHelp}>Help</Button>
+        </div>
+    {/if}
+
+    {#if showHelp && !debug}
+        <Box>
             <p>Welcome! Please enter the form below. Please enter the names of your team members and some skills you want to compare. The visualization will only start to make sense once we have some data!</p>
             <ButtonToolbar>
                 <Button on:click={useDemoData}>Use demo data</Button>
                 <Button on:click={toggleHelp}>Hide this</Button>
                 <Button on:click={toggleDebug}>Debug mode</Button>
             </ButtonToolbar>
-        </Blankslate>
-    </div>
-{/if}
+        </Box>
+    {/if}
 
-<div id="columns">
-    <div>
-        {#if maxTeamMembersReached}
-        <Alert type="error" dismissible>Hey, the maximum # of team members has been reached.</Alert>
-        {/if}
-        <h3>Team members</h3>
-        <p>Add your team members to the list.</p>
-        <form on:submit|preventDefault={addTeamMember}>
-            {#if teamMemberAmount > 0}
-                <table>
-                {#each teamMembers as teamMember, i}
-                    <tr>
-                        <td><Input type="text" bind:value={teamMember} /></td>
-                        <td>
-                            <Button icon="delete" layout="icon-only" on:click={() => removeTeamMember(i)}>Delete</Button>
-                        </td>
-                    </tr>
-                {/each}
-                </table>
-            {:else}
-                <Blankslate>No team members yet.</Blankslate>
+    <div id="columns">
+        <div>
+            {#if maxTeamMembersReached}
+            <Alert type="error" dismissible>Hey, the maximum # of team members has been reached.</Alert>
             {/if}
-            <div class="form-group" style="margin-top: 1.2rem;">
-                <Label forValue="fieldTeamMemberName">Team member name</Label>
-                <Input id="fieldTeamMemberName" type="text" bind:value={newTeamMember} disabled={maxTeamMembersReached} />
-                <Button type="submit" icon="add" disabled={!newTeamMember} style="margin-top: 5px;">Add team member</Button>
-            </div>
-        </form>
-    </div>
-    <div>
-        <h3>Skills</h3>
-        <p>Add some skills relevant to your team to the list.</p>
-        <form on:submit|preventDefault={addSkill}>
-            {#if skillAmount > 0}
-                <table>
-                    {#each skills as skill, i}
+            <h3>Team members</h3>
+            <p>Add your team members to the list.</p>
+            <form on:submit|preventDefault={addTeamMember}>
+                {#if teamMemberAmount > 0}
+                    <table>
+                    {#each teamMembers as teamMember, i}
                         <tr>
-                            <td><Input type="text" bind:value={skill} /></td>
+                            <td><Input type="text" bind:value={teamMember} /></td>
                             <td>
-                                <Button icon="delete" layout="icon-only" on:click={() => removeSkill(i)}>Delete</Button>
+                                <Button icon="delete" layout="icon-only" on:click={() => removeTeamMember(i)}>Delete</Button>
                             </td>
                         </tr>
                     {/each}
-                </table>
-            {:else}
-                <Blankslate>No skills yet.</Blankslate>
+                    </table>
+                {:else}
+                    <Blankslate>No team members yet.</Blankslate>
+                {/if}
+                <div class="form-group" style="margin-top: 1.2rem;">
+                    <Label forValue="fieldTeamMemberName">Team member name</Label>
+                    <Input id="fieldTeamMemberName" type="text" bind:value={newTeamMember} disabled={maxTeamMembersReached} />
+                    <Button type="submit" icon="add" disabled={!newTeamMember} style="margin-top: 5px;">Add team member</Button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <h3>Skills</h3>
+            <p>Add some skills relevant to your team to the list.</p>
+            <form on:submit|preventDefault={addSkill}>
+                {#if skillAmount > 0}
+                    <table>
+                        {#each skills as skill, i}
+                            <tr>
+                                <td><Input type="text" bind:value={skill} /></td>
+                                <td>
+                                    <Button icon="delete" layout="icon-only" on:click={() => removeSkill(i)}>Delete</Button>
+                                </td>
+                            </tr>
+                        {/each}
+                    </table>
+                {:else}
+                    <Blankslate>No skills yet.</Blankslate>
+                {/if}
+
+                <div class="form-group" style="margin-top: 1.2rem;">
+                    <Label forValue="fieldSkillName">Skill name:</Label>
+                    <Input id="fieldSkillName" type="text" bind:value={newSkill} />
+                    <Button type="submit" icon="add" disabled={!newSkill} style="margin-top: 5px;">Add skill</Button>
+                </div>
+
+            </form>
+        </div>
+        <div>
+            {#if (!teamMemberAmount == 0 && !skillAmount == 0)}
+                {#if skillAmount <= 2 }
+                    <Blankslate>Please enter at least 3 skills.</Blankslate>
+                {:else}
+                    <Chart chartValues="{skillMap}" skillMaxValue={skillMaxValue} chartColors={chartColors} teamMembers="{teamMembers}" skills="{skills}" />
+                {/if}
             {/if}
-
-            <div class="form-group" style="margin-top: 1.2rem;">
-                <Label forValue="fieldSkillName">Skill name:</Label>
-                <Input id="fieldSkillName" type="text" bind:value={newSkill} />
-                <Button type="submit" icon="add" disabled={!newSkill} style="margin-top: 5px;">Add skill</Button>
-            </div>
-
-        </form>
+        </div>
     </div>
-    <div>
-        {#if (!teamMemberAmount == 0 && !skillAmount == 0)}
-            {#if skillAmount <= 2 }
-                <Blankslate>Please enter at least 3 skills.</Blankslate>
-            {:else}
-                <Chart chartValues="{skillMap}" skillMaxValue={skillMaxValue} chartColors={chartColors} teamMembers="{teamMembers}" skills="{skills}" />
-            {/if}
-        {/if}
-    </div>
-</div>
 
-{#if (!teamMemberAmount == 0 && !skillAmount == 0)}
-    {#if (skillAmount >= 3 && teamMemberAmount >= 2)}
-        <table class="input-values">
-            <tr>
-                <th></th>
-                {#each skills as skill}
-                    <th>
-                        {#if skill.length > 20 }
-                            <span class="longName">{ skill }</span>
-                        {:else}
-                            <span>{ skill }</span>
-                        {/if}
-                    </th>
-                {/each}
-            </tr>
-            {#each skillMap as skillMapRow, i}
-                <tr>
-                    <td>
-                        <InputColor style="margin-right: 0.5rem;" bind:value="{chartColors[i]}" />
-                        {teamMembers[i]}
-                    </td>
-                    {#each skillMapRow as skillMapNumber, i}
-                    <td style="text-align: center;">
-                        <SkillItem {skillMaxValue} {skillMinValue} bind:rating={skillMapNumber}></SkillItem>
-                    </td>
+    {#if (!teamMemberAmount == 0 && !skillAmount == 0)}
+        {#if (skillAmount >= 3 && teamMemberAmount >= 2)}
+            <div class="scroller">
+                <table class="input-values">
+                    <tr>
+                        <th></th>
+                        {#each skills as skill}
+                            <th>
+                                {#if skill.length > 20 }
+                                    <span class="longName">{ skill }</span>
+                                {:else}
+                                    <span>{ skill }</span>
+                                {/if}
+                            </th>
+                        {/each}
+                    </tr>
+                    {#each skillMap as skillMapRow, i}
+                        <tr>
+                            <td>
+                                <InputColor style="margin-right: 0.5rem;" bind:value="{chartColors[i]}" />
+                                {teamMembers[i]}
+                            </td>
+                            {#each skillMapRow as skillMapNumber, i}
+                            <td style="text-align: center;">
+                                <SkillItem {skillMaxValue} {skillMinValue} bind:rating={skillMapNumber}></SkillItem>
+                            </td>
+                            {/each}
+                        </tr>
                     {/each}
-                </tr>
-            {/each}
-        </table>
+                </table>
+            </div>
+        {/if}
     {/if}
-{/if}
 
-<AlertStack alertStackData={alertStackData}></AlertStack>
+    <AlertStack alertStackData={alertStackData}></AlertStack>
+</div>

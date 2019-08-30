@@ -1,6 +1,6 @@
 <script>
 
-    import Button from './Button.svelte';
+    import Button from '../UI/Button.svelte';
 
     export let rating;
 
@@ -20,11 +20,13 @@
     let narrow = false;
 
     let windowWidth = window.innerWidth;
-    $: windowWidth = windowWidth;
+
+    handleResize();
 
     function handleResize() {
+        windowWidth = window.innerWidth;
         if (windowWidth < 1023) {
-          narrow = false  
+          narrow = false
         } else {
             narrow = true;
         }
@@ -39,7 +41,7 @@
         justify-content: center;
         align-content: center;
     }
-    
+
     .wrapper-narrow {
         justify-content: center;
         flex-direction: column;

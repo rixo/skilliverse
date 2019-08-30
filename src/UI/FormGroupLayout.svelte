@@ -9,7 +9,7 @@
     }
 
     :global(.form-group-layout-horizontal .form-group-controls) {
-    	flex: 1 0 auto;
+    	flex: 1 1 auto;
     }
 
 </style>
