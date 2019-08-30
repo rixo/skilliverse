@@ -24,7 +24,6 @@
     }
 
     a, button {
-        mix-blend-mode: multiply;
         background: #F0F0F0;
         border: 1px solid #CCC;
         border-radius: 0.3rem;

@@ -21,9 +21,6 @@
 
     let maxTeamMembersReached = false;
 
-    let isDesktop = true;
-    $: window.outerWidth < 1023 ? isDesktop = false : isDesktop = true;
-
     // Limits of the app
     let maxTeamMembers = 8;
     let maxSkills = 8;
@@ -549,16 +546,7 @@
                     </td>
                     {#each skillMapRow as skillMapNumber, i}
                     <td style="text-align: center;">
-                        {#if isDesktop}
                         <SkillItem {skillMaxValue} {skillMinValue} bind:rating={skillMapNumber}></SkillItem>
-                        {:else}
-                        <InputNumber
-                            max={skillMaxValue}
-                            min={skillMinValue}
-                            bind:value={skillMapNumber}
-                            classValue={!isValidNumber(skillMapNumber) ? 'invalid' : ''}
-                        />
-                        {/if}
                     </td>
                     {/each}
                 </tr>

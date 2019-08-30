@@ -17,6 +17,19 @@
         rating += 1;
     }
 
+    let narrow = false;
+
+    let windowWidth = window.innerWidth;
+    $: windowWidth = windowWidth;
+
+    function handleResize() {
+        if (windowWidth < 1023) {
+          narrow = false  
+        } else {
+            narrow = true;
+        }
+    }
+
 </script>
 
 <style>
@@ -24,20 +37,32 @@
     .wrapper {
         display: flex;
         justify-content: center;
+        align-content: center;
+    }
+    
+    .wrapper-narrow {
+        justify-content: center;
+        flex-direction: column;
     }
 
     .skill-rating {
         display: inline-block;
-        width: 3.2rem;
         height: 3.2rem;
+        width: 3.2rem;
         text-align: center;
         line-height: 3.2rem;
-        margin: 0 0.6rem;
+    }
+
+    .wrapper-narrow .skill-rating {
+        padding: 0 0.6rem;
+        width: 100%;
     }
 
 </style>
 
-<div class="wrapper">
+<svelte:window on:resize={handleResize}/>
+
+<div class="wrapper {narrow ? '' : 'wrapper-narrow'}">
     <Button icon="remove" layout="icon-only" disabled={rating <= skillMinValue} on:click={decrement}>Decrement</Button>
     <span class="skill-rating">{rating}</span>
     <Button icon="add" layout="icon-only" disabled={rating >= skillMaxValue} on:click={increment}>Increment</Button>
