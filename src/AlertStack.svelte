@@ -37,7 +37,7 @@
     <ul class="alert-stack">
         {#each alertStackData as item}
             <li>
-                <Alert>{item}</Alert>
+                <Alert type="error">{item}</Alert>
             </li>
         {/each}
     </ul>

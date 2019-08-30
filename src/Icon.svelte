@@ -4,6 +4,7 @@
     import IconQuestion from './Icons/16/actions/question.svg';
     import IconAdd from './Icons/16/actions/add.svg';
     import IconRemove from './Icons/16/actions/remove.svg';
+    import IconClose from './Icons/16/actions/close.svg';
     export let icon;
 </script>
 
@@ -19,4 +20,6 @@
 {#if icon == 'remove'}
     {@html IconRemove}
 {/if}
-
+{#if icon == 'close'}
+    {@html IconClose}
+{/if}

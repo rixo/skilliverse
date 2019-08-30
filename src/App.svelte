@@ -8,6 +8,7 @@
     import Input from './Input.svelte';
     import InputNumber from './InputNumber.svelte';
     import InputColorAlt from './InputColorAlt.svelte';
+    import Sample from './Sample.svelte';
     import SkillItem from './SkillItem.svelte';
     import Button from './Button.svelte';
     import ButtonToolbar from './ButtonToolbar.svelte';
@@ -30,6 +31,7 @@
     let skillMaxValue = 5;
 
     let debug = true;
+    let styleguide = false;
 
     // Default data
     let teamMembers = [];
@@ -183,6 +185,10 @@
         debug = !debug;
     }
 
+    function toggleStyleguide() {
+        styleguide = !styleguide;
+    }
+
     /* Feature: Adding and removing data
        ========================================================================== */
 
@@ -328,10 +334,81 @@
         #columns > div:nth-child(3) { flex: 3 1 40rem; padding: 0; }
 
     }
+    
+    #styleguide {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 4rem;
+        background: #FFF;
+        z-index: 1;
+        overflow: scroll;
+    }
 
 </style>
 
 <h1>Skilliverse {#if teamName}for {teamName}{/if}</h1>
+
+{#if styleguide}
+    <div id="styleguide">
+        <Button on:click={toggleStyleguide}>Hide styleguide</Button>
+        <h1>Styleguide</h1>
+
+        <h2>Pickers</h2>
+
+        <Sample>
+            <Select>
+                <option value="value-1">Value 1</option>
+                <option value="value-2">Value 2</option>
+                <option value="value-3">Value 3</option>
+            </Select>
+        </Sample>
+
+        <h2>Inputs</h2>
+
+        <h3>Text</h3>
+
+        <Sample>
+            <Input value="Test" />
+        </Sample>
+        <h3>Color</h3>
+        <Sample>
+            <InputColor value="#FF0000" />
+        </Sample>
+
+        <h2>Alerts</h2>
+
+        <h3>Skins</h3>
+        <Sample>
+            <Alert>Hey</Alert>
+        </Sample>
+        <Sample>
+            <Alert type="error">Hey</Alert>
+        </Sample>
+        <Sample>
+            <Alert type="success">Hey</Alert>
+        </Sample>
+
+        <h3>Types</h3>
+        <h4>Normal</h4>
+        <Sample>
+            <Alert>Hey</Alert>
+        </Sample>
+        <h4>Dismissible</h4>
+        <Sample>
+            <Alert dismissible>Hey</Alert>
+        </Sample>
+
+        <h2>Buttons</h2>
+        <Sample>
+            <Button icon="close" layout="icon-only">Close</Button>
+            <Button icon="close">Close</Button>
+        </Sample>
+
+    </div>
+{/if}
 
 {#if debug}
     <div id="debug">
@@ -359,6 +436,7 @@
             </FormGroup>
         </FormGroupLayout>
         <Button on:click={toggleDebug}>Exit debug mode</Button>
+        <Button on:click={toggleStyleguide}>Show styleguide</Button>
     </div>
 {/if}
 
@@ -384,7 +462,7 @@
 <div id="columns">
     <div>
         {#if maxTeamMembersReached}
-        <Alert>Hey, the maximum # of team members has been reached.</Alert>
+        <Alert type="error" dismissible>Hey, the maximum # of team members has been reached.</Alert>
         {/if}
         <h3>Team members</h3>
         <p>Add your team members to the list.</p>

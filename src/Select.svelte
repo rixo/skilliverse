@@ -22,21 +22,38 @@
         width: 100%;
     }
 
-    .select-holder select:after {
+    .select-holder:before,
+    .select-holder:after {
+        border-width: 1rem;
+        border: 0.4rem solid #777;
+        border-left-color: transparent;
+        border-right-color: transparent;
         display: block;
         pointer-events: none;
         content: ' ';
         position: absolute;
-        right: 1rem;
-        top: 1.4rem;
         width: 0;
         height: 0;
-        border-width: 1rem;
-        border: 0.5rem solid #DDD;
-        border-bottom-color: transparent;
-        border-left-color: transparent;
-        border-right-color: transparent;
+        right: 1rem;
     }
+
+    .select-holder:before {
+        top: 0.7rem;
+        border-top-color: transparent;
+    }
+    
+    .select-holder:after {
+        top: 1.8rem;
+        border-bottom-color: transparent;
+    }
+
+    select:focus {
+        outline: 0;
+        border-color: #3A75CB;
+        box-shadow: 0 0 0 0.1rem #3A75CB, 0 0 0 0.4rem #C3DCFF;
+        transition: 0.1s ease-in-out all;
+    }
+
 </style>
 
 <div class="select-holder">

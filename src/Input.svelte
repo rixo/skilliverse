@@ -22,6 +22,13 @@
         box-shadow: inset 0.1rem 0.1rem 0.2rem 0 rgba(0,0,0,0.12);
     }
 
+    input:focus {
+        outline: 0;
+        border-color: #3A75CB;
+        box-shadow: 0 0 0 0.1rem #3A75CB, 0 0 0 0.4rem #C3DCFF;
+        transition: 0.1s ease-in-out all;
+    }
+
     input[type="text"][disabled] {
         background: #EEE;
     }

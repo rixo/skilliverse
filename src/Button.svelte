@@ -24,6 +24,7 @@
     }
 
     a, button {
+        mix-blend-mode: multiply;
         background: #F0F0F0;
         border: 1px solid #CCC;
         border-radius: 0.3rem;
@@ -37,6 +38,14 @@
 
     button[disabled] {
         opacity: 0.4;
+    }
+
+    a:focus, button:focus {
+        background: #FFF;
+        outline: 0;
+        border-color: #3A75CB;
+        box-shadow: 0 0 0 0.1rem #3A75CB, 0 0 0 0.4rem #C3DCFF;
+        transition: 0.1s ease-in-out all;
     }
 
 </style>
