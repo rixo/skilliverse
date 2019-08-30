@@ -1,0 +1,58 @@
+<script>
+
+    import ButtonInnerLayout from './ButtonInnerLayout.svelte';
+
+    // type="button" or type="submit"
+    export let type = false;
+    export let classValue = null;
+
+    // if it contains a link
+    export let href = false;
+    export let value = "Default value";
+    export let disabled = false;
+    export let style = null;
+    export let icon = null;
+    export let layout = null;
+
+</script>
+
+<style>
+
+    a, button {
+        font-size: 1.4rem;
+        font-family: Helvetica, Arial, sans-serif;
+    }
+
+    a, button {
+        background: #F0F0F0;
+        border: 1px solid #CCC;
+        border-radius: 0.3rem;
+        padding: 0.7rem;
+        align-items: center;
+        display: inline-flex;
+        justify-content: center;
+        vertical-align: baseline;
+        color: #333;
+    }
+
+    button[disabled] {
+        opacity: 0.4;
+    }
+
+</style>
+
+{#if href}
+    <a href="{href}" {style} {classValue}>
+        <ButtonInnerLayout {icon} {layout}><slot></slot></ButtonInnerLayout>
+   </a>
+{:else}
+    {#if type == "submit"}
+        <button type="submit" {disabled} {classValue} {style} on:submit on:click>
+            <ButtonInnerLayout {icon} {layout}><slot></slot></ButtonInnerLayout>
+    	</button>
+    {:else}
+        <button type="button" {disabled} {classValue} {style} on:submit|preventDefault on:click>
+            <ButtonInnerLayout {icon} {layout}><slot></slot></ButtonInnerLayout>
+    	</button>
+    {/if}
+{/if}

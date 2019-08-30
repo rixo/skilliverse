@@ -1,0 +1,88 @@
+/* Base */
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+html {
+	font-size: 62.5%;
+}
+
+/* Utilities */
+.u-sr-only {
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+body {
+	font-size: 1.4rem;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+#debug {
+	background: #EEE;
+	margin: 0 0 2rem;
+	padding: 2rem 2rem 1rem;
+}
+
+input.input-short {
+	width: 40px;
+}
+
+.longName {
+	display: inline-block;
+	width: 12.5rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+table {
+	width: 100%;
+}
+
+
+.muted {
+	color: #666;
+}
+
+.invalid {
+	/* For invalid fields */
+	border-color:red !important;
+}
+
+table.input-values th span {
+	display: inline-block;
+}
+
+table.input-values {
+	margin-top: 2rem;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+
+table.input-values td {
+	/* border: 1px solid #DDD; */
+	padding: 0.5rem;
+	text-align: center;
+}
+
+table.input-values td:first-child {
+	text-align: left;
+	width: 12rem;
+}
+
+table.input-values input[type="number"] {
+	text-align: center;
+	max-width: calc(100% - 0.6rem);
+	margin: 0 auto;
+	padding: 0.3rem;
+	margin: 0.3rem;
+}
+
+table.input-values tr td:first-child {
+	border: none;
+}
