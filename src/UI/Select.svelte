@@ -1,7 +1,7 @@
 <script>
-    export let id;
-    export let value;
-    export let changeEvent;
+    export let id = null;
+    export let value = null;
+    export let changeEvent = null;
 </script>
 
 <style>
@@ -41,7 +41,7 @@
         top: 0.7rem;
         border-top-color: transparent;
     }
-    
+
     .select-holder:after {
         top: 1.8rem;
         border-bottom-color: transparent;

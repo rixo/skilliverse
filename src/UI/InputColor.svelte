@@ -1,7 +1,7 @@
 <script>
     export let id = null;
-    export let value;
-    export let style;
+    export let value = null;
+    export let style = null;
 </script>
 
 <style>

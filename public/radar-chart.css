@@ -13,7 +13,7 @@
 	}
 
 	.chaarts[class*="radar"] {
-		--radius: 11.8em;
+		--radius: 12.8rem;
 		--unitless-radius: calc(1024 / 16 / 5);
 		--size: calc(var(--radius) / var(--scale));
 		--part: calc(360deg / var(--items));
@@ -77,7 +77,8 @@
 		--away: calc((var(--radius) * -1) - 50%);
 		left: 50%;
 		margin: 0;
-		padding: 4.5rem;
+		padding: 0.5rem;
+		max-width: 9rem;
 		font-size: 1.1rem;
 		font-weight: 400;
 		color: #333;

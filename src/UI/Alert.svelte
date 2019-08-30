@@ -3,8 +3,8 @@
     import Button from './Button.svelte';
 
     export let message = "Default message";
-    export let type;
-    export let dismissible;
+    export let type = null;;
+    export let dismissible = null;
     export let show = true;
 
 </script>
@@ -29,11 +29,15 @@
         border: 1px solid #EAA2A2;
         color: #C80000;
     }
-    
+
     .alert-success {
         background: #D6F7D1;
         border: 1px solid #ABE2A2;
         color: #32542D;
+    }
+
+    :global(.alert button) {
+        mix-blend-mode: multiply;
     }
 
 </style>

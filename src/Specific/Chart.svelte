@@ -8,11 +8,9 @@
   export let skillMaxValue = 5;
   export let teamMembers = ["Name 1", "Name 2", "Name 3"];
   export let skills = ["Skill 1", "Skill 2", "Skill 3"];
-
-  let chartData = [];
-
   export let chartColors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'darkgrey'];
 
+  let chartData = [];
   $: for (var i = 0; i < chartValues.length; i++) {
     chartData.push();
         chartData[i] = "--color: "+chartColors[i]+";"
@@ -23,10 +21,6 @@
   }
 
 </script>
-
-<style>
-
-</style>
 
 <table
   class="chaarts radar-multiple"
