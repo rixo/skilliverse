@@ -1,8 +1,5 @@
 <style>
 
-    .grid-item {
-
-    }
 
 </style>
 

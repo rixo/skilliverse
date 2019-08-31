@@ -1,6 +1,9 @@
 <style>
 
-    .form-group {
+    :global(
+        .form-group-layout-standard .form-group,
+        .form-group-layout-horizontal .form-group
+    ) {
         margin: 0 0 12px;
         align-items: center;
     }

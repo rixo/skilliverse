@@ -12,6 +12,11 @@
     	flex: 1 1 auto;
     }
 
+    :global(.form-group-layout-inline .form-group) {
+        display: flex;
+        align-items: center;
+    }
+
 </style>
 
 {#if type == "standard"}

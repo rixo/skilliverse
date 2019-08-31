@@ -12,6 +12,7 @@ This is a demo app built in Svelte mostly to practice my programming skills.
 
 ## Todo
 
+* Refactor skillitem to a general stepper component
 * Continue work on the grid item logic
 * Add a meta description to the website - maybe with opengraph tags?
 * Make an empty data set for testing purposes

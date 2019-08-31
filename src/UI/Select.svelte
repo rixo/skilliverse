@@ -20,6 +20,7 @@
     .select-holder {
         position: relative;
         width: 100%;
+        min-width: 8.5rem;
     }
 
     .select-holder:before,

@@ -14,6 +14,7 @@
     .alert {
         padding: 1.6rem;
         border-radius: 0.3rem;
+        margin: 0 0 1.6rem;
         display: flex;
         align-items: center;
         justify-content: space-between;

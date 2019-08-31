@@ -16,6 +16,12 @@
     :global(.form-group-layout-horizontal .form-group label) {
     	flex: 0 1 12rem;
     }
+
+    :global(.form-group-layout-inline .form-group label) {
+        margin-right: 1.2rem;
+        white-space: nowrap;
+    }
+
 </style>
 
 <label for="{forValue}">

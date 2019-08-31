@@ -10,39 +10,49 @@
     import Toc from './Styleguide/Toc.svelte';
 
     // General UI
-    import Box from './UI/Box.svelte';
-    import Label from './UI/Label.svelte';
-    import Select from './UI/Select.svelte';
-    import Input from './UI/Input.svelte';
-    import InputNumber from './UI/InputNumber.svelte';
-    import InputColorAlt from './UI/InputColorAlt.svelte';
-    import Button from './UI/Button.svelte';
-    import ButtonToolbar from './UI/ButtonToolbar.svelte';
-    import Icon from './UI/Icon.svelte';
-    import FormGroup from './UI/FormGroup.svelte';
-    import Toolbar from './UI/Toolbar.svelte';
-    import ToolbarItem from './UI/ToolbarItem.svelte';
-    import FormGroupLayout from './UI/FormGroupLayout.svelte';
     import Alert from './UI/Alert.svelte';
     import AlertStack from './UI/AlertStack.svelte';
     import Blankslate from './UI/Blankslate.svelte';
-    import GridLayout from './UI/GridLayout.svelte';
+    import Box from './UI/Box.svelte';
+    import Button from './UI/Button.svelte';
+    import ButtonToolbar from './UI/ButtonToolbar.svelte';
+    import Content from './UI/Content.svelte';
+    import FormGroup from './UI/FormGroup.svelte';
+    import FormGroupLayout from './UI/FormGroupLayout.svelte';
     import GridItem from './UI/GridItem.svelte';
+    import GridLayout from './UI/GridLayout.svelte';
+    import Icon from './UI/Icon.svelte';
+    import Input from './UI/Input.svelte';
     import InputColor from './UI/InputColor.svelte';
+    import InputColorAlt from './UI/InputColorAlt.svelte';
+    import InputNumber from './UI/InputNumber.svelte';
+    import Label from './UI/Label.svelte';
+    import NavBar from './UI/NavBar.svelte';
     import Panel from './UI/Panel.svelte';
-    import PanelRow from './UI/PanelRow.svelte';
-    import PanelHeader from './UI/PanelHeader.svelte';
     import PanelBody from './UI/PanelBody.svelte';
+    import PanelHeader from './UI/PanelHeader.svelte';
+    import PanelRow from './UI/PanelRow.svelte';
+    import Select from './UI/Select.svelte';
+    import Spacer from './UI/Spacer.svelte';
+    import Toolbar from './UI/Toolbar.svelte';
+    import ToolbarGroup from './UI/ToolbarGroup.svelte';
+    import ToolbarItem from './UI/ToolbarItem.svelte';
 
+    // App state
     let maxTeamMembersReached = false;
 
     // Limits of the app
     let maxTeamMembers = 8;
     let maxSkills = 8;
+
+    // Settings
     let skillMinValue = 0;
     let skillMaxValue = 5;
 
-    let debug = true;
+    // General
+    let debug = false;
+
+    // Styleguide related
     let styleguide = false;
     let generateToc = false;
 
@@ -50,10 +60,9 @@
     let teamMembers = [];
     let skills = [];
     let skillMap = [];
-    let dataset = "medium";
-    let showHelp = true;
+    let dataset;
+    let showHelp = false;
     let alertStackData = [];
-    let teamName = '';
 
     // Should have # amount of colors as max skills
     let chartColors = [
@@ -286,6 +295,12 @@
         }
     }
 
+    function clearData() {
+        teamMembers = [];
+        skills = []
+        skillMap = [];
+    }
+
     /* Feature: demo data and debug panel
        ========================================================================== */
 
@@ -317,6 +332,8 @@
         useDemoData("big");
     }
 
+    // React to window size to change controls for the stepper
+
     let windowWidth = window.innerWidth;
     let isMobile = false;
 
@@ -336,13 +353,6 @@
 <style>
 
     /* General app layout */
-
-    .help-area {
-        position: absolute;
-        top: 1.2rem;
-        right: 1.2rem;
-    }
-
     #styleguide {
         position: fixed;
         top: 0;
@@ -353,6 +363,7 @@
         background: #FFF;
         z-index: 1;
         overflow: scroll;
+        -webkit-overflow-scrolling: touch;
     }
 
 </style>
@@ -361,381 +372,409 @@
 
 <div class="{isMobile ? 'is-mobile' : ''}">
 
-    <h1>Skilliverse {#if teamName}for {teamName}{/if}</h1>
+    <NavBar>
+        <Toolbar>
+            <ToolbarGroup>
+                <ToolbarItem>
+                    <h1>Skilliverse</h1>
+                </ToolbarItem>
+            </ToolbarGroup>
+                <ToolbarGroup>
+                    <ToolbarItem>
+                        <FormGroupLayout type="inline">
+                            <FormGroup>
+                                <Label>Load dataset</Label>
+                                <Select id="fieldDataset" bind:value={dataset} changeEvent="{useDemoData}">
+                                    <option>Choose...</option>
+                                    <option value="short">Short</option>
+                                    <option value="medium" >Medium</option>
+                                    {#if debug}
+                                    <option value="big">Big</option>
+                                    <option value="invalid">Invalid</option>
+                                    {/if}
+                                </Select>
+                            </FormGroup>
+                        </FormGroupLayout>
+                    </ToolbarItem>
+                    <ToolbarItem>
+                        <Button icon="add" on:click={clearData}>New data set</Button>
+                    </ToolbarItem>
+                    {#if !showHelp}
+                        <ToolbarItem>
+                            <Button icon="question" on:click={toggleHelp}>Help</Button>
+                        </ToolbarItem>
+                    {/if}
+                </ToolbarGroup>
 
-    {#if styleguide}
-        <div id="styleguide">
-            <GridLayout>
-                <GridItem>
-                    <Button on:click={toggleStyleguide}>Hide styleguide</Button>
-                    <Toc {generateToc} />
-                </GridItem>
-                <GridItem>
-                    <h1>Styleguide</h1>
+        </Toolbar>
+    </NavBar>
 
-                    <div id="components">
+    <Spacer>
 
-                        <Component>
+        {#if debug}
+            <Box id="debug">
+                <FormGroupLayout type="horizontal">
+                    <FormGroup>
+                        <Label>Full colors set</Label>
+                        <div class="form-group-controls">
+                            <Toolbar>
+                                <ToolbarGroup>
+                                    {#each chartColors as color}
+                                        <ToolbarItem>
+                                            <InputColor bind:value="{color}" />
+                                        </ToolbarItem>
+                                    {/each}
+                                </ToolbarGroup>
+                            </Toolbar>
+                        </div>
+                    </FormGroup>
+                </FormGroupLayout>
+                <Button on:click={toggleDebug}>Exit debug mode</Button>
+                <Button on:click={toggleStyleguide}>Show styleguide</Button>
+            </Box>
+        {/if}
 
-                            <h2>Alerts</h2>
+        {#if showHelp}
+            <Box>
+                <Content>
+                    <p>Welcome! Please enter the form below. Please enter the names of your team members and some skills you want to compare. The visualization will only start to make sense once we have some data!</p>
+                </Content>
+                <ButtonToolbar>
+                    <Button on:click={toggleHelp}>Hide this</Button>
+                    <Button on:click={toggleDebug}>Debug mode</Button>
+                </ButtonToolbar>
+            </Box>
+        {/if}
 
-                            <h3>Skins</h3>
-                            <h4>Default</h4>
-                            <Sample>
-                                <Alert>I am a default alert.</Alert>
-                            </Sample>
-                            <h4>Error</h4>
-                            <Sample>
-                                <Alert type="error">I am an error message.</Alert>
-                            </Sample>
-                            <h4>Success</h4>
-                            <Sample>
-                                <Alert type="success">I am a success message.</Alert>
-                            </Sample>
+        <PanelRow>
+            <Panel nopad ghost>
+                <PanelHeader title="Team Members" />
+                <PanelBody>
+                    {#if maxTeamMembersReached}
+                        <Alert type="error" dismissible>Hey, the maximum # of team members has been reached.</Alert>
+                    {/if}
 
-                            <h3>Types</h3>
-                            <h4>Normal</h4>
-                            <Sample>
-                                <Alert>Hey, I don't have any options.</Alert>
-                            </Sample>
-                            <h4>Dismissible</h4>
-                            <Sample>
-                                <Alert dismissible>Hey, I am dismissible.</Alert>
-                            </Sample>
-                        </Component>
+                    <Content>
+                        <p>Add your team members to the list.</p>
+                    </Content>
+
+                    <form on:submit|preventDefault={addTeamMember}>
+                        {#if teamMemberAmount > 0}
+                            <table class="multi-adder">
+                            {#each teamMembers as teamMember, i}
+                                <tr>
+                                    <td><Input type="text" bind:value={teamMember} /></td>
+                                    <td>
+                                        <Button icon="delete" layout="icon-only" on:click={() => removeTeamMember(i)}>Delete</Button>
+                                    </td>
+                                </tr>
+                            {/each}
+                            </table>
+                        {:else}
+                            <Blankslate>No team members yet.</Blankslate>
+                        {/if}
+                        <div class="form-group" style="margin-top: 1.2rem;">
+                            <Label forValue="fieldTeamMemberName">Team member name</Label>
+                            <Input id="fieldTeamMemberName" type="text" bind:value={newTeamMember} disabled={maxTeamMembersReached} />
+                            <Button type="submit" icon="add" disabled={!newTeamMember} style="margin-top: 5px;">Add team member</Button>
+                        </div>
+                    </form>
+                </PanelBody>
+            </Panel>
+            <Panel nopad ghost>
+                <PanelHeader title="Skills" />
+                <PanelBody>
+
+                    <Content>
+                        <p>Add some skills relevant to your team to the list.</p>
+                    </Content>
+
+                    <form on:submit|preventDefault={addSkill}>
+                        {#if skillAmount > 0}
+                            <table class="multi-adder">
+                                {#each skills as skill, i}
+                                    <tr>
+                                        <td><Input type="text" bind:value={skill} /></td>
+                                        <td>
+                                            <Button icon="delete" layout="icon-only" on:click={() => removeSkill(i)}>Delete</Button>
+                                        </td>
+                                    </tr>
+                                {/each}
+                            </table>
+                        {:else}
+                            <Blankslate>No skills yet.</Blankslate>
+                        {/if}
+
+                        <div class="form-group" style="margin-top: 1.2rem;">
+                            <Label forValue="fieldSkillName">Skill name:</Label>
+                            <Input id="fieldSkillName" type="text" bind:value={newSkill} />
+                            <Button type="submit" icon="add" disabled={!newSkill} style="margin-top: 5px;">Add skill</Button>
+                        </div>
+
+                    </form>
+                </PanelBody>
+            </Panel>
+            {#if (!teamMemberAmount == 0 && !skillAmount == 0)}
+                {#if skillAmount > 2 && teamMemberAmount > 1 }
+                    <Panel ghost>
+                        <PanelBody>
+                            <Chart chartValues="{skillMap}" skillMaxValue={skillMaxValue} chartColors={chartColors} teamMembers="{teamMembers}" skills="{skills}" />
+                        </PanelBody>
+                    </Panel>
+                {/if}
+            {/if}
+        </PanelRow>
+
+        {#if (!teamMemberAmount == 0 && !skillAmount == 0)}
+            {#if (skillAmount >= 3 && teamMemberAmount >= 2)}
+                <table class="input-values">
+                    <tr>
+                        <th></th>
+                        {#each skills as skill}
+                            <th>
+                                {#if skill.length > 20 }
+                                    <span class="longName">{ skill }</span>
+                                {:else}
+                                    <span>{ skill }</span>
+                                {/if}
+                            </th>
+                        {/each}
+                    </tr>
+                    {#each skillMap as skillMapRow, i}
+                        <tr>
+                            <td>
+                                <InputColor style="margin-right: 0.5rem;" bind:value="{chartColors[i]}" />
+                                {teamMembers[i]}
+                            </td>
+                            {#each skillMapRow as skillMapNumber, i}
+                            <td style="text-align: center;">
+                                <SkillItem {skillMaxValue} {skillMinValue} bind:rating={skillMapNumber}></SkillItem>
+                            </td>
+                            {/each}
+                        </tr>
+                    {/each}
+                </table>
+            {/if}
+        {/if}
+
+    </Spacer>
+</div>
+
+<AlertStack alertStackData={alertStackData}></AlertStack>
+
+{#if styleguide}
+    <div id="styleguide">
+        <GridLayout>
+            <GridItem>
+                <Button on:click={toggleStyleguide}>Hide styleguide</Button>
+                <Toc {generateToc} />
+            </GridItem>
+            <GridItem>
+                <h1>Styleguide</h1>
+
+                <div id="components">
+
+                    <Component>
+
+                        <h2>Alerts</h2>
+
+                        <h3>Skins</h3>
+                        <h4>Default</h4>
+                        <Sample>
+                            <Alert>I am a default alert.</Alert>
+                        </Sample>
+                        <h4>Error</h4>
+                        <Sample>
+                            <Alert type="error">I am an error message.</Alert>
+                        </Sample>
+                        <h4>Success</h4>
+                        <Sample>
+                            <Alert type="success">I am a success message.</Alert>
+                        </Sample>
+
+                        <h3>Types</h3>
+                        <h4>Normal</h4>
+                        <Sample>
+                            <Alert>Hey, I don't have any options.</Alert>
+                        </Sample>
+                        <h4>Dismissible</h4>
+                        <Sample>
+                            <Alert dismissible>Hey, I am dismissible.</Alert>
+                        </Sample>
+                    </Component>
 
 
-                        <Component>
-                            <h2>Buttons</h2>
-                            <h3>Types</h3>
-                            <h4>Icon only</h4>
-                            <Sample>
-                                <Button icon="close" layout="icon-only">Close</Button>
-                            </Sample>
-                            <h4>Icon and label</h4>
-                            <Sample>
-                                <Button icon="close">Close</Button>
-                                <Button icon="add">Add</Button>
-                                <Button icon="remove">Remove</Button>
-                                <Button icon="delete">Delete</Button>
-                                <Button icon="question">Help</Button>
-                            </Sample>
-                        </Component>
+                    <Component>
+                        <h2>Buttons</h2>
+                        <h3>Types</h3>
+                        <h4>Icon only</h4>
+                        <Sample>
+                            <Button icon="close" layout="icon-only">Close</Button>
+                        </Sample>
+                        <h4>Icon and label</h4>
+                        <Sample>
+                            <Button icon="close">Close</Button>
+                            <Button icon="add">Add</Button>
+                            <Button icon="remove">Remove</Button>
+                            <Button icon="delete">Delete</Button>
+                            <Button icon="question">Help</Button>
+                        </Sample>
+                    </Component>
 
-                        <Component>
+                    <Component>
 
-                            <h2>Inputs</h2>
+                        <h2>Inputs</h2>
 
-                            <h3>Text</h3>
+                        <h3>Text</h3>
 
-                            <Sample>
-                                <Input value="Test" />
-                            </Sample>
+                        <Sample>
+                            <Input value="Test" />
+                        </Sample>
 
-                            <h3>Color</h3>
-                            <Sample>
-                                <InputColor value="#FF0000" />
-                            </Sample>
+                        <h3>Color</h3>
+                        <Sample>
+                            <InputColor value="#FF0000" />
+                        </Sample>
 
-                        </Component>
+                    </Component>
 
-                        <Component>
+                    <Component>
 
-                            <h2>Box</h2>
-                            <Sample>
-                                <Box>I am a box.</Box>
-                            </Sample>
+                        <h2>Box</h2>
+                        <Sample>
+                            <Box>I am a box.</Box>
+                        </Sample>
 
-                        </Component>
+                    </Component>
 
-                        <Component>
-                            <h2>Blank slate</h2>
-                            <Sample>
-                                <Blankslate>I am a blank slate. Use me when no content is available.</Blankslate>
-                            </Sample>
-                        </Component>
+                    <Component>
+                        <h2>Blank slate</h2>
+                        <Sample>
+                            <Blankslate>I am a blank slate. Use me when no content is available.</Blankslate>
+                        </Sample>
+                    </Component>
 
-                        <Component>
-                            <h2>Panels</h2>
-                            <p>Use panels to easily create layouts.</p>
-                            <Sample>
+                    <Component>
+                        <h2>Panels</h2>
+                        <p>Use panels to easily create layouts.</p>
+                        <Sample>
+                            <Panel>
+                                <PanelHeader title="Panel header" />
+                                <PanelBody>
+                                    <p>I am HTML content.</p>
+                                </PanelBody>
+                            </Panel>
+                        </Sample>
+                        <Sample>
+                            <PanelRow panelCount="2'">
                                 <Panel>
                                     <PanelHeader title="Panel header" />
                                     <PanelBody>
                                         <p>I am HTML content.</p>
                                     </PanelBody>
                                 </Panel>
-                            </Sample>
-                            <Sample>
-                                <PanelRow panelCount="2'">
-                                    <Panel>
-                                        <PanelHeader title="Panel header" />
-                                        <PanelBody>
-                                            <p>I am HTML content.</p>
-                                        </PanelBody>
-                                    </Panel>
-                                    <Panel>
-                                        <PanelHeader title="Panel header" />
-                                        <PanelBody>
-                                            <p>I am HTML content.</p>
-                                        </PanelBody>
-                                    </Panel>
-                                </PanelRow>
-                            </Sample>
-                            <Sample>
-                                <PanelRow>
-                                    <Panel>
-                                        <PanelHeader title="Panel header" />
-                                        <PanelBody>
-                                            <p>I am HTML content.</p>
-                                        </PanelBody>
-                                    </Panel>
-                                    <Panel>
-                                        <PanelHeader title="Panel header" />
-                                        <PanelBody>
-                                            <p>I am HTML content.</p>
-                                        </PanelBody>
-                                    </Panel>
-                                    <Panel>
-                                        <PanelHeader title="Panel header" />
-                                        <PanelBody>
-                                            <p>I am HTML content.</p>
-                                        </PanelBody>
-                                    </Panel>
-                                </PanelRow>
-                            </Sample>
-                        </Component>
+                                <Panel>
+                                    <PanelHeader title="Panel header" />
+                                    <PanelBody>
+                                        <p>I am HTML content.</p>
+                                    </PanelBody>
+                                </Panel>
+                            </PanelRow>
+                        </Sample>
+                        <Sample>
+                            <PanelRow>
+                                <Panel>
+                                    <PanelHeader title="Panel header" />
+                                    <PanelBody>
+                                        <p>I am HTML content.</p>
+                                    </PanelBody>
+                                </Panel>
+                                <Panel>
+                                    <PanelHeader title="Panel header" />
+                                    <PanelBody>
+                                        <p>I am HTML content.</p>
+                                    </PanelBody>
+                                </Panel>
+                                <Panel>
+                                    <PanelHeader title="Panel header" />
+                                    <PanelBody>
+                                        <p>I am HTML content.</p>
+                                    </PanelBody>
+                                </Panel>
+                            </PanelRow>
+                        </Sample>
+                    </Component>
 
-                        <Component>
-                            <h2>Form group</h2>
-                            <h3>Standard</h3>
-                            <Sample>
-                                <FormGroupLayout>
-                                    <FormGroup>
-                                        <Label>Field name</Label>
-                                        <Input value="Value" />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Field name</Label>
-                                        <Input value="Value" />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Field name</Label>
-                                        <Input value="Value" />
-                                    </FormGroup>
-                                </FormGroupLayout>
-                            </Sample>
+                    <Component>
+                        <h2>Form group</h2>
+                        <h3>Standard</h3>
+                        <Sample>
+                            <FormGroupLayout>
+                                <FormGroup>
+                                    <Label>Field name</Label>
+                                    <Input value="Value" />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label>Field name</Label>
+                                    <Input value="Value" />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label>Field name</Label>
+                                    <Input value="Value" />
+                                </FormGroup>
+                            </FormGroupLayout>
+                        </Sample>
 
-                            <h3>Horizontal</h3>
-                            <Sample>
-                                <FormGroupLayout type="horizontal">
-                                    <FormGroup>
-                                        <Label>Field name</Label>
-                                        <Input value="Value" />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Field name</Label>
-                                        <Input value="Value" />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Field name</Label>
-                                        <Input value="Value" />
-                                    </FormGroup>
-                                </FormGroupLayout>
-                            </Sample>
-                        </Component>
+                        <h3>Horizontal</h3>
+                        <Sample>
+                            <FormGroupLayout type="horizontal">
+                                <FormGroup>
+                                    <Label>Field name</Label>
+                                    <Input value="Value" />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label>Field name</Label>
+                                    <Input value="Value" />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label>Field name</Label>
+                                    <Input value="Value" />
+                                </FormGroup>
+                            </FormGroupLayout>
+                        </Sample>
+                    </Component>
 
-                        <Component>
+                    <Component>
 
-                            <h2>Pickers</h2>
+                        <h2>Pickers</h2>
 
-                            <h3>Single option</h3>
+                        <h3>Single option</h3>
 
-                            <Sample>
-                                <Select>
-                                    <option value="value-1">Value 1</option>
-                                    <option value="value-2">Value 2</option>
-                                    <option value="value-3">Value 3</option>
-                                </Select>
-                            </Sample>
+                        <Sample>
+                            <Select>
+                                <option value="value-1">Value 1</option>
+                                <option value="value-2">Value 2</option>
+                                <option value="value-3">Value 3</option>
+                            </Select>
+                        </Sample>
 
-                        </Component>
+                    </Component>
 
-                        <Component>
-                            <h2>Icons</h2>
-                            <Sample>
-                                <Icon icon="close" />
-                                <Icon icon="add" />
-                                <Icon icon="remove" />
-                                <Icon icon="delete" />
-                                <Icon icon="question" />
-                            </Sample>
-                        </Component>
+                    <Component>
+                        <h2>Icons</h2>
+                        <Sample>
+                            <Icon icon="close" />
+                            <Icon icon="add" />
+                            <Icon icon="remove" />
+                            <Icon icon="delete" />
+                            <Icon icon="question" />
+                        </Sample>
+                    </Component>
 
-                    </div>
-                </GridItem>
-            </GridLayout>
+                </div>
+            </GridItem>
+        </GridLayout>
 
 
-        </div>
-    {/if}
-
-    {#if debug}
-        <Box id="debug">
-            <FormGroupLayout type="horizontal">
-                <FormGroup>
-                    <Label>Team name</Label>
-                    <Input bind:value="{teamName}" />
-                </FormGroup>
-                <FormGroup>
-                    <Label>Dataset</Label>
-                    <Select id="fieldDataset" bind:value={dataset} changeEvent="{useDemoData}">
-                        <option value="big">Big</option>
-                        <option value="short">Short</option>
-                        <option value="medium" >Medium</option>
-                        <option value="invalid">Invalid</option>
-                    </Select>
-                </FormGroup>
-                <FormGroup>
-                    <Label>Full colors set</Label>
-                    <div class="form-group-controls">
-                        <Toolbar>
-                            {#each chartColors as color}
-                                <ToolbarItem>
-                                    <InputColor bind:value="{color}" />
-                                </ToolbarItem>
-                            {/each}
-                        </Toolbar>
-                    </div>
-                </FormGroup>
-            </FormGroupLayout>
-            <Button on:click={toggleDebug}>Exit debug mode</Button>
-            <Button on:click={toggleStyleguide}>Show styleguide</Button>
-        </Box>
-    {/if}
-
-    {#if !showHelp}
-        <div class="help-area">
-            <Button icon="question" on:click={toggleHelp}>Help</Button>
-        </div>
-    {/if}
-
-    {#if showHelp && !debug}
-        <Box>
-            <p>Welcome! Please enter the form below. Please enter the names of your team members and some skills you want to compare. The visualization will only start to make sense once we have some data!</p>
-            <ButtonToolbar>
-                <Button on:click={useDemoData}>Use demo data</Button>
-                <Button on:click={toggleHelp}>Hide this</Button>
-                <Button on:click={toggleDebug}>Debug mode</Button>
-            </ButtonToolbar>
-        </Box>
-    {/if}
-
-    <PanelRow>
-        <Panel>
-            <PanelHeader title="Team Members" />
-            <PanelBody>
-                {#if maxTeamMembersReached}
-                    <Alert type="error" dismissible>Hey, the maximum # of team members has been reached.</Alert>
-                {/if}
-
-                <p>Add your team members to the list.</p>
-                <form on:submit|preventDefault={addTeamMember}>
-                    {#if teamMemberAmount > 0}
-                        <table>
-                        {#each teamMembers as teamMember, i}
-                            <tr>
-                                <td><Input type="text" bind:value={teamMember} /></td>
-                                <td>
-                                    <Button icon="delete" layout="icon-only" on:click={() => removeTeamMember(i)}>Delete</Button>
-                                </td>
-                            </tr>
-                        {/each}
-                        </table>
-                    {:else}
-                        <Blankslate>No team members yet.</Blankslate>
-                    {/if}
-                    <div class="form-group" style="margin-top: 1.2rem;">
-                        <Label forValue="fieldTeamMemberName">Team member name</Label>
-                        <Input id="fieldTeamMemberName" type="text" bind:value={newTeamMember} disabled={maxTeamMembersReached} />
-                        <Button type="submit" icon="add" disabled={!newTeamMember} style="margin-top: 5px;">Add team member</Button>
-                    </div>
-                </form>
-            </PanelBody>
-        </Panel>
-        <Panel>
-            <PanelHeader title="Skills" />
-            <PanelBody>
-                <p>Add some skills relevant to your team to the list.</p>
-                <form on:submit|preventDefault={addSkill}>
-                    {#if skillAmount > 0}
-                        <table>
-                            {#each skills as skill, i}
-                                <tr>
-                                    <td><Input type="text" bind:value={skill} /></td>
-                                    <td>
-                                        <Button icon="delete" layout="icon-only" on:click={() => removeSkill(i)}>Delete</Button>
-                                    </td>
-                                </tr>
-                            {/each}
-                        </table>
-                    {:else}
-                        <Blankslate>No skills yet.</Blankslate>
-                    {/if}
-
-                    <div class="form-group" style="margin-top: 1.2rem;">
-                        <Label forValue="fieldSkillName">Skill name:</Label>
-                        <Input id="fieldSkillName" type="text" bind:value={newSkill} />
-                        <Button type="submit" icon="add" disabled={!newSkill} style="margin-top: 5px;">Add skill</Button>
-                    </div>
-
-                </form>
-            </PanelBody>
-        </Panel>
-        {#if (!teamMemberAmount == 0 && !skillAmount == 0)}
-            {#if skillAmount <= 2 }
-                <Blankslate>Please enter at least 3 skills.</Blankslate>
-            {:else}
-                <Panel>
-                    <PanelBody>
-                        <Chart chartValues="{skillMap}" skillMaxValue={skillMaxValue} chartColors={chartColors} teamMembers="{teamMembers}" skills="{skills}" />
-                    </PanelBody>
-                </Panel>
-            {/if}
-        {/if}
-    </PanelRow>
-
-    {#if (!teamMemberAmount == 0 && !skillAmount == 0)}
-        {#if (skillAmount >= 3 && teamMemberAmount >= 2)}
-            <table class="input-values">
-                <tr>
-                    <th></th>
-                    {#each skills as skill}
-                        <th>
-                            {#if skill.length > 20 }
-                                <span class="longName">{ skill }</span>
-                            {:else}
-                                <span>{ skill }</span>
-                            {/if}
-                        </th>
-                    {/each}
-                </tr>
-                {#each skillMap as skillMapRow, i}
-                    <tr>
-                        <td>
-                            <InputColor style="margin-right: 0.5rem;" bind:value="{chartColors[i]}" />
-                            {teamMembers[i]}
-                        </td>
-                        {#each skillMapRow as skillMapNumber, i}
-                        <td style="text-align: center;">
-                            <SkillItem {skillMaxValue} {skillMinValue} bind:rating={skillMapNumber}></SkillItem>
-                        </td>
-                        {/each}
-                    </tr>
-                {/each}
-            </table>
-        {/if}
-    {/if}
-
-    <AlertStack alertStackData={alertStackData}></AlertStack>
-</div>
+    </div>
+{/if}

@@ -1,12 +1,5 @@
 
-@supports (
-	(
-		-webkit-clip-path: polygon(calc(0% 0%, 100% - (var(--1) * 100% / var(--scale))) 100%, 100% 100%))
-		or
-		(clip-path: polygon(calc(0% 0%, 100% - (var(--1) * 100% / var(--scale))) 100%, 100% 100%)
-		)
-	)
-	{
+@supports ((-webkit-clip-path: polygon(calc(0% 0%, 100% - (var(--1) * 100% / var(--scale))) 100%, 100% 100%)) or (clip-path: polygon(calc(0% 0%, 100% - (var(--1) * 100% / var(--scale))) 100%, 100% 100%))) {
 
 	.radar-container .fieldset {
 		display: flex !important;

@@ -10,12 +10,10 @@
 
     input {
         font-size: 1.4rem;
+        line-height: 1.3;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    }
-
-    input {
         width: 100%;
-        padding: 0.7rem;
+        padding: 0.6rem;
         background: #FFF;
         color: #333;
         border-radius: 0.3rem;
