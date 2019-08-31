@@ -64,6 +64,10 @@
 </script>
 
 <style>
+    :global(#toc) {
+        position: sticky;
+        top: 0;
+    }
     :global(#toc ol) {
         margin: 0;
         padding: 0;

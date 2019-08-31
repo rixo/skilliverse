@@ -404,6 +404,12 @@
                             <Button icon="question" on:click={toggleHelp}>Help</Button>
                         </ToolbarItem>
                     {/if}
+                    <ToolbarItem>
+                        <Button on:click={toggleDebug}>Toggle debug mode</Button>
+                    </ToolbarItem>
+                    <ToolbarItem>
+                        <Button on:click={toggleStyleguide}>Show styleguide</Button>
+                    </ToolbarItem>
                 </ToolbarGroup>
 
         </Toolbar>
@@ -429,8 +435,6 @@
                         </div>
                     </FormGroup>
                 </FormGroupLayout>
-                <Button on:click={toggleDebug}>Exit debug mode</Button>
-                <Button on:click={toggleStyleguide}>Show styleguide</Button>
             </Box>
         {/if}
 
@@ -563,11 +567,13 @@
 <AlertStack alertStackData={alertStackData}></AlertStack>
 
 {#if styleguide}
-    <div id="styleguide">
+    <div id="styleguide" class="content">
         <GridLayout>
             <GridItem>
-                <Button on:click={toggleStyleguide}>Hide styleguide</Button>
-                <Toc {generateToc} />
+                <Button icon="close" on:click={toggleStyleguide}>Close styleguide</Button>
+                <Spacer side="top">
+                    <Toc {generateToc} />
+                </Spacer>
             </GridItem>
             <GridItem>
                 <h1>Styleguide</h1>
