@@ -1,12 +1,16 @@
-import svelte from 'rollup-plugin-svelte'
+import svelte from 'rollup-plugin-svelte-hot'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import svg from 'rollup-plugin-svg'
 import svench from 'svench/rollup'
+import hmr from 'rollup-plugin-hot'
 
 const production = !process.env.ROLLUP_WATCH
+
+const useLiveReload = !production && !!process.env.LIVERELOAD
+const hot = process.env.ROLLUP_WATCH && !useLiveReload
 
 export default {
   input: 'src/main.js',
@@ -17,7 +21,7 @@ export default {
     file: 'public/bundle.js',
   },
 
-  inlineDynamicImports: true,
+  inlineDynamicImports: !hot,
 
   plugins: [
     svench.rollup({
@@ -40,6 +44,7 @@ export default {
           extensions: ['.svench', '.svelte'],
         }),
       ],
+      hot,
     }),
 
     // If you have external dependencies installed from
@@ -57,11 +62,21 @@ export default {
     svg(),
     // Watch the `public` directory and refresh the
     // browser on changes when not in production
-    !production && livereload('public'),
+    useLiveReload && livereload('public'),
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
     production && terser(),
+
+    hmr({
+      public: 'public',
+      inMemory: true,
+      // This is needed, otherwise Terser (in npm run build) chokes
+      // on import.meta. With this option, the plugin will replace
+      // import.meta.hot in your code with module.hot, and will do
+      // nothing else.
+      compatModuleHot: !hot,
+    }),
   ],
   watch: {
     clearScreen: false,
