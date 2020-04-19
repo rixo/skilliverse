@@ -1,51 +1,69 @@
-import svelte from 'rollup-plugin-svelte';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import livereload from 'rollup-plugin-livereload';
-import { terser } from 'rollup-plugin-terser';
-import svg from 'rollup-plugin-svg';
+import svelte from 'rollup-plugin-svelte'
+import resolve from 'rollup-plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import livereload from 'rollup-plugin-livereload'
+import { terser } from 'rollup-plugin-terser'
+import svg from 'rollup-plugin-svg'
+import svench from 'svench/rollup'
 
-const production = !process.env.ROLLUP_WATCH;
+const production = !process.env.ROLLUP_WATCH
 
 export default {
-	input: 'src/main.js',
-	output: {
-		sourcemap: true,
-		format: 'iife',
-		name: 'app',
-		file: 'public/bundle.js'
-	},
-	plugins: [
-		svelte({
-			// enable run-time checks when not in production
-			dev: !production,
-			// we'll extract any component CSS out into
-			// a separate file — better for performance
-			css: css => {
-				css.write('public/bundle.css');
-			}
-		}),
+  input: 'src/main.js',
+  output: {
+    sourcemap: true,
+    format: 'iife',
+    name: 'app',
+    file: 'public/bundle.js',
+  },
 
-		// If you have external dependencies installed from
-		// npm, you'll most likely need these plugins. In
-		// some cases you'll need additional configuration —
-		// consult the documentation for details:
-		// https://github.com/rollup/rollup-plugin-commonjs
-		resolve({
-			browser: true,
-			dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/')
-		}),
-		commonjs(),
-		svg(),
-		// Watch the `public` directory and refresh the
-		// browser on changes when not in production
-		!production && livereload('public'),
+  inlineDynamicImports: true,
 
-		// If we're building for production (npm run build
-		// instead of npm run dev), minify
-		production && terser()
-	],
-	watch: {
-		clearScreen: false
-	}
-};
+  plugins: [
+    svench.rollup({
+      dir: './src/Svench',
+      extensions: ['.svench', '.svelte'],
+    }),
+
+    svelte({
+      // enable run-time checks when not in production
+      dev: !production,
+      // we'll extract any component CSS out into
+      // a separate file — better for performance
+      css: css => {
+        css.write('public/bundle.css')
+      },
+      preprocess: [
+        // preprocessor is only needed to automatically extracts source code
+        // from View components
+        svench.preprocess({
+          extensions: ['.svench', '.svelte'],
+        }),
+      ],
+    }),
+
+    // If you have external dependencies installed from
+    // npm, you'll most likely need these plugins. In
+    // some cases you'll need additional configuration —
+    // consult the documentation for details:
+    // https://github.com/rollup/rollup-plugin-commonjs
+    resolve({
+      browser: true,
+      dedupe: importee =>
+        importee === 'svelte' || importee.startsWith('svelte/'),
+      // dedupe: ['svelte']
+    }),
+    commonjs(),
+    svg(),
+    // Watch the `public` directory and refresh the
+    // browser on changes when not in production
+    !production && livereload('public'),
+
+    // If we're building for production (npm run build
+    // instead of npm run dev), minify
+    production && terser(),
+  ],
+  watch: {
+    clearScreen: false,
+  },
+}

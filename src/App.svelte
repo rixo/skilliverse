@@ -410,6 +410,9 @@
                     <ToolbarItem>
                         <Button on:click={toggleStyleguide}>Show styleguide</Button>
                     </ToolbarItem>
+                    <ToolbarItem>
+                        <a href="/svench">Svench</a>
+                    </ToolbarItem>
                 </ToolbarGroup>
 
         </Toolbar>
